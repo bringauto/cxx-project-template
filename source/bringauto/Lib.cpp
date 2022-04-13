@@ -23,7 +23,7 @@ void Lib::TestDependencies() {
 
     auto curl = curl_easy_init();
     if (!curl) {
-        return 1;
+        return;
     }
     curl_easy_setopt(curl, CURLOPT_URL, "https://api.github.com/repos/whoshuu/cpr/contributors?anon=true&key=value");
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1L);

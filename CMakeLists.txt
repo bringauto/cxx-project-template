@@ -13,7 +13,7 @@ INCLUDE(cmake/Settings.cmake)
 # If you do not have one just follow https://github.com/cmakelib/cmakelib
 #
 FIND_PACKAGE(CMLIB
-    COMPONENTS CMDEF
+    COMPONENTS CMDEF STORAGE
     REQUIRED
 )
 
@@ -33,7 +33,7 @@ SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 
 # We do not need to use CMDEF_LIBRARY,
 # because we do not want to include library in the package
-ADD_LIBRARY(balib STATIC lib/bringauto/Lib.cpp)
+ADD_LIBRARY(balib STATIC source/bringauto/Lib.cpp)
 TARGET_INCLUDE_DIRECTORIES(balib PUBLIC include/)
 TARGET_LINK_LIBRARIES(balib PUBLIC nlohmann_json::nlohmann_json CURL::libcurl)
 
@@ -44,18 +44,23 @@ CMDEF_ADD_EXECUTABLE(
 )
 TARGET_LINK_LIBRARIES(test PUBLIC balib)
 
-# Install created target
-CMDEF_INSTALL(TARGET test)
 
-# Install all shared library dependencies needed for json_target
-# and update RUNPATH.
-BA_PACKAGE_DEPS_IMPORTED(test)
+IF(BRINGAUTO_INSTALL)
+    # Install created target
+    CMDEF_INSTALL(TARGET test)
 
-# Create a package
-CMDEF_PACKAGE(
-    MAIN_TARGET test
-    VERSION     1.0.9
-)
+    # Install all shared library dependencies needed for json_target
+    # and update RUNPATH.
+    BA_PACKAGE_DEPS_IMPORTED(test)
+ENDIF()
 
-SET(CPACK_GENERATOR ZIP)
-INCLUDE(CPack)
+IF(BRINGAUTO_PACKAGE)
+    # Create a package
+    CMDEF_PACKAGE(
+        MAIN_TARGET test
+        VERSION     1.0.9
+    )
+
+    SET(CPACK_GENERATOR ZIP)
+    INCLUDE(CPack)
+ENDIF()

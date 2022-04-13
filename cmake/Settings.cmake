@@ -5,7 +5,7 @@ ENDIF()
     
 # Delete FORCE once the tests are implemented
 SET(BRINGAUTO_TESTS OFF
-    CACHE BOOl
+    CACHE BOOL
     "Enable/disable tests"
     FORCE
 )
@@ -16,27 +16,27 @@ ENDIF()
     
 # Delete FORCE once the tests are implemented
 SET(BRINGAUTO_SAMPLES OFF
-    CACHE BOOl
+    CACHE BOOL
     "Enable/disable samples"
     FORCE
 )
 
 SET(BRINGAUTO_SYSTEM_DEP OFF
-    CACHE BOOl
+    CACHE BOOL
     "Enable/disable using system dependencies. If OFF we use BringAuto Package Tracker to download dependencies"
 )
     
 SET(BRINGAUTO_INSTALL ON
-    CACHE BOOl
+    CACHE BOOL
     "Enable/disable project INSTALL"
 )
 SET(BRINGAUTO_PACKAGE ON
-    CACHE BOOl
+    CACHE BOOL
     "Enable/disable project INSTALL"
 )
 IF(BRINGAUTO_PACKAGE AND NOT BRINGAUTO_INSTALL)
     SET(BRINGAUTO_INSTALL ON
-        CACHE BOOl
+        CACHE BOOL
         "Enable/disable project INSTALL"
         FORCE
     )

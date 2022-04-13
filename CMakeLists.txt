@@ -3,7 +3,7 @@
 #
 #
 
-PROJECT(BA_PROJECT_NAME CXX)
+PROJECT(cxx-project-name CXX)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.18)
 
 INCLUDE(cmake/Settings.cmake)
@@ -17,7 +17,7 @@ FIND_PACKAGE(CMLIB
     REQUIRED
 )
 
-IF(BRINGAUTO_SYSTEM_DEP)
+IF(NOT BRINGAUTO_SYSTEM_DEP)
     INCLUDE(cmake/Dependencies.cmake)
 ENDIF()
 
@@ -26,6 +26,7 @@ ENDIF()
 # as a documented by the package upstream
 #
 FIND_PACKAGE(nlohmann_json REQUIRED)
+FIND_PACKAGE(ZLIB          REQUIRED)
 FIND_PACKAGE(CURL          REQUIRED)
 
 # We need to update RPATH to install path of dependencicies
@@ -35,29 +36,29 @@ SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 # because we do not want to include library in the package
 ADD_LIBRARY(balib STATIC source/bringauto/Lib.cpp)
 TARGET_INCLUDE_DIRECTORIES(balib PUBLIC include/)
-TARGET_LINK_LIBRARIES(balib PUBLIC nlohmann_json::nlohmann_json CURL::libcurl)
+TARGET_LINK_LIBRARIES(balib PUBLIC nlohmann_json::nlohmann_json CURL::libcurl ZLIB::ZLIB)
 
 CMDEF_ADD_EXECUTABLE(
-    TARGET test
+    TARGET cxx-project-template
     SOURCES main.cpp
     VERSION 1.8.5
 )
-TARGET_LINK_LIBRARIES(test PUBLIC balib)
+TARGET_LINK_LIBRARIES(cxx-project-template PUBLIC balib)
 
 
 IF(BRINGAUTO_INSTALL)
     # Install created target
-    CMDEF_INSTALL(TARGET test)
+    CMDEF_INSTALL(TARGET cxx-project-template)
 
     # Install all shared library dependencies needed for json_target
     # and update RUNPATH.
-    BA_PACKAGE_DEPS_IMPORTED(test)
+    BA_PACKAGE_DEPS_IMPORTED(cxx-project-template)
 ENDIF()
 
 IF(BRINGAUTO_PACKAGE)
     # Create a package
     CMDEF_PACKAGE(
-        MAIN_TARGET test
+        MAIN_TARGET cxx-project-template
         VERSION     1.0.9
     )
 
